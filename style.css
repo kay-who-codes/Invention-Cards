@@ -43,6 +43,28 @@ button:hover {
   background-color: #45a049;
 }
 
+/* Card styling */
+.card {
+  font-size: 1.5em; /* Larger text size */
+  font-weight: bold; /* Embolden text */
+  border: 2px solid #4CAF50; /* Green outline */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Add spacing inside the card */
+  margin: 10px auto; /* Spacing between cards and center alignment */
+  width: fit-content; /* Card width adjusts to content */
+  background-color: #f9f9f9; /* Light background colour */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  text-align: center; /* Center text inside the card */
+}
+
+/* Add hover effect for interactivity */
+.card:hover {
+  background-color: #e8f5e9; /* Slightly different background on hover */
+  border-color: #45a049; /* Darker green border */
+  transform: scale(1.05); /* Slight zoom effect */
+  transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
 /* Hide and show elements */
 .hidden {
   display: none;
