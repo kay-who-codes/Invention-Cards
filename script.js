@@ -74,12 +74,15 @@ function drawProductCards() {
 
 // Function to display cards on the screen
 function displayCards(cards) {
-  // Hide the menu and show the card display section
-  document.getElementById('menu').classList.add('hidden');
-  document.getElementById('card-display').classList.remove('hidden');
+  console.log("Cards being displayed:", cards);
 
-  // Update the card display with the selected cards
-  document.getElementById('cards-output').innerHTML = cards.join('<br>');
+  if (cards.length > 0) {
+    document.getElementById('menu').classList.add('hidden');
+    document.getElementById('card-display').classList.remove('hidden');
+    document.getElementById('cards-output').innerHTML = cards.join('<br>');
+  } else {
+    console.log("No cards to display");
+  }
 }
 
 // Function to return to the main menu
