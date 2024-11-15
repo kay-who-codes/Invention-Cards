@@ -7,6 +7,10 @@ fetch('cards.json')
    .then(data => cardsData = data)
    .catch(error => console.error('Error loading card data:', error));
 
+// To keep track of used buyer and product cards
+let usedBuyerCards = [];
+let usedProductCards = [];
+
 // Function to draw a single buyer card
 function drawBuyerCard() {
    if (!cardsData.buyerCards || cardsData.buyerCards.length === 0) {
@@ -14,9 +18,21 @@ function drawBuyerCard() {
        return;
    }
 
-   // Draw a random buyer card and remove it from the array
-   const randomIndex = Math.floor(Math.random() * cardsData.buyerCards.length);
-   const buyerCard = cardsData.buyerCards.splice(randomIndex, 1)[0]; // Splice removes the card
+   // Filter out already used cards
+   const availableBuyerCards = cardsData.buyerCards.filter(card => !usedBuyerCards.includes(card));
+
+   if (availableBuyerCards.length === 0) {
+       alert("No more unique buyer cards left!");
+       return;
+   }
+
+   // Draw a random buyer card from the remaining available ones
+   const randomIndex = Math.floor(Math.random() * availableBuyerCards.length);
+   const buyerCard = availableBuyerCards[randomIndex];
+
+   // Mark the card as used by adding it to the used list
+   usedBuyerCards.push(buyerCard);
+
    displayCards([buyerCard]);
 }
 
@@ -27,11 +43,23 @@ function drawProductCards() {
        return;
    }
 
+   // Filter out already used cards
+   const availableProductCards = cardsData.productCards.filter(card => !usedProductCards.includes(card));
+
+   if (availableProductCards.length < 7) {
+       alert("Not enough unique product cards left!");
+       return;
+   }
+
    const productCards = [];
    for (let i = 0; i < 7; i++) {
-       // Draw a random product card and remove it from the array
-       const randomIndex = Math.floor(Math.random() * cardsData.productCards.length);
-       productCards.push(cardsData.productCards.splice(randomIndex, 1)[0]); // Splice removes the card
+       const randomIndex = Math.floor(Math.random() * availableProductCards.length);
+       const productCard = availableProductCards[randomIndex];
+
+       // Mark the card as used by adding it to the used list
+       usedProductCards.push(productCard);
+
+       productCards.push(productCard);
    }
    displayCards(productCards);
 }
