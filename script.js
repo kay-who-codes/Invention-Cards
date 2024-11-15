@@ -74,12 +74,24 @@ function drawProductCards() {
 
 // Function to display cards on the screen
 function displayCards(cards) {
-  console.log("Cards being displayed:", cards);
+  console.log("Cards being displayed:", cards);  // Confirm the cards are being passed correctly
 
+  // Ensure there are cards to display
   if (cards.length > 0) {
+    // Hide the menu and show the card display
     document.getElementById('menu').classList.add('hidden');
     document.getElementById('card-display').classList.remove('hidden');
-    document.getElementById('cards-output').innerHTML = cards.join('<br>');
+
+    // Clear any previous content in the card display
+    document.getElementById('cards-output').innerHTML = '';
+
+    // Display each card in the cards array
+    cards.forEach(card => {
+      const cardElement = document.createElement('div');
+      cardElement.classList.add('card'); // Add styling if needed
+      cardElement.textContent = card;  // Add the card name as text
+      document.getElementById('cards-output').appendChild(cardElement);
+    });
   } else {
     console.log("No cards to display");
   }
