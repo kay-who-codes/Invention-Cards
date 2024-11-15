@@ -4,7 +4,9 @@ let cardsData = {};
 // Fetch card data from cards.json
 fetch('cards.json')
    .then(response => response.json())
-   .then(data => cardsData = data)
+   .then(data => {
+      cardsData = data; // Store the data in cardsData
+   })
    .catch(error => console.error('Error loading card data:', error));
 
 // To keep track of used buyer and product cards
