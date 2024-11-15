@@ -1,26 +1,79 @@
 {
-"buyerCards": [
-"Busy Mum with five kids.", "College Student living on instant noodles.", "Overworked Office
-Worker.", "Retired Grandparent who loves bingo.", "Dog Walker with six energetic pups.",
-"Celebrity Chef looking for the next culinary gadget.", "Tech Startup CEO.", "Fitness Trainer
-launching a new gym.", "Architect designing futuristic homes.", "Fashion Designer preparing
-for a runway show.", "Time Traveller from the 1800s.", "Space Explorer looking for Mars-
-compatible gadgets.", "Supervillain needing a secret weapon.", "Pirate Captain seeking
-treasure tools.", "Wizard in need of enchanted items.", "Survivalist preparing for an
-apocalypse.", "Wedding Planner managing a chaotic event.", "Theme Park Owner designing
-a new attraction.", "Kindergarten Teacher calming a class of toddlers.", "Adventurer stuck on
-a desert island.", "Talking Cat with high standards.", "Robot Butler upgrading its systems.",
-"Dragon guarding a hoard of gold.", "Ghost redecorating its haunted house.", "Alien visiting
-Earth for the first time."
-],
-"productCards": [
-"Toothbrush", "Banana", "Jetpack", "Flamethrower", "Bicycle", "Frisbee", "Backpack", "Coffee
-mug", "Roller skates", "Umbrella", "Smartphone", "Solar panel", "AI assistant", "Drone", "VR
-headset", "Wireless charger", "Smart glasses", "Bluetooth speaker", "Electric scooter",
-"Gaming console", "Microwave", "Toaster", "Electric fan", "Vacuum cleaner", "Lawn mower",
-"Shower curtain", "Blender", "Lightbulb", "Alarm clock", "Sofa bed", "Unicorn horn", "Jet
-engine", "Bubble maker", "Catapult", "Invisible cloak", "Sticky tape", "Mini trampoline", "Glitter
-dispenser", "Water balloon", "Lava lamp", "Hotdog", "Pizza slice", "Ice cream cone",
-"Doughnut", "Spaghetti", "Chocolate bar", "Popcorn"
-]
+  "buyerCards": [
+    "Busy Mum with five kids.",
+    "College Student living on instant noodles.",
+    "Overworked Office Worker.",
+    "Retired Grandparent who loves bingo.",
+    "Dog Walker with six energetic pups.",
+    "Celebrity Chef looking for the next culinary gadget.",
+    "Tech Startup CEO.",
+    "Fitness Trainer launching a new gym.",
+    "Architect designing futuristic homes.",
+    "Fashion Designer preparing for a runway show.",
+    "Time Traveller from the 1800s.",
+    "Space Explorer looking for Mars-compatible gadgets.",
+    "Supervillain needing a secret weapon.",
+    "Pirate Captain seeking treasure tools.",
+    "Wizard in need of enchanted items.",
+    "Survivalist preparing for an apocalypse.",
+    "Wedding Planner managing a chaotic event.",
+    "Theme Park Owner designing a new attraction.",
+    "Kindergarten Teacher calming a class of toddlers.",
+    "Adventurer stuck on a desert island.",
+    "Talking Cat with high standards.",
+    "Robot Butler upgrading its systems.",
+    "Dragon guarding a hoard of gold.",
+    "Ghost redecorating its haunted house.",
+    "Alien visiting Earth for the first time."
+  ],
+  "productCards": [
+    "Toothbrush",
+    "Banana",
+    "Jetpack",
+    "Flamethrower",
+    "Bicycle",
+    "Frisbee",
+    "Backpack",
+    "Coffee mug",
+    "Roller skates",
+    "Umbrella",
+    "Smartphone",
+    "Solar panel",
+    "AI assistant",
+    "Drone",
+    "VR headset",
+    "Wireless charger",
+    "Smart glasses",
+    "Bluetooth speaker",
+    "Electric scooter",
+    "Gaming console",
+    "Microwave",
+    "Toaster",
+    "Electric fan",
+    "Vacuum cleaner",
+    "Lawn mower",
+    "Shower curtain",
+    "Blender",
+    "Lightbulb",
+    "Alarm clock",
+    "Sofa bed",
+    "Unicorn horn",
+    "Jet engine",
+    "Bubble maker",
+    "Catapult",
+    "Invisible cloak",
+    "Sticky tape",
+    "Mini trampoline",
+    "Glitter dispenser",
+    "Water balloon",
+    "Lava lamp",
+    "Hotdog",
+    "Pizza slice",
+    "Ice cream cone",
+    "Doughnut",
+    "Spaghetti",
+    "Chocolate bar",
+    "Popcorn",
+    "Energy drink"
+  ]
 }
