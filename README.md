@@ -1,4 +1,4 @@
-#A Simple Game About Buyers and Entrepreneures
+# A Simple Game About Buyers and Entrepreneures
 
 (Rules will be written soon)
 
