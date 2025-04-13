@@ -3,37 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💡 Invention Cards</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Dope or Nope</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-green: #4CAF50;
+            --accent-green-dark: #388E3C;
+            --card-bg: #1E1E1E;
+            --card-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--accent-green);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        button {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: var(--accent-green-dark);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .card.selected {
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .card-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-row {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    
-  <!-- Main Menu -->
-  <div id="main-menu">
-    <h1>Invention Cards</h1>
+    <div class="container">
+        <!-- Role Selection -->
+        <div id="role-selection-screen">
+            <h1>Dope or Nope</h1>
+            <h3>Choose your role:</h3>
+            <div class="card-row">
+                <div class="card" id="buyer-card">
+                    <h3>Buyer</h3>
+                    <p>View a random buyer prompt</p>
+                </div>
+                <div class="card" id="entrepreneur-card">
+                    <h3>Entrepreneur</h3>
+                    <p>Create a product to pitch</p>
+                </div>
+            </div>
+        </div>
 
-    <!-- Draw Buttons -->
-    <div id="menu">
-        <button onclick="drawBuyerCard()">Draw Buyer Card</button>
-        <button onclick="drawProductCards()">Draw Product Cards</button>
+        <!-- Buyer Screen -->
+        <div id="buyer-screen" class="hidden">
+            <h2>Buyer Prompt</h2>
+            <div class="card">
+                <h3>Your Character:</h3>
+                <p id="buyer-prompt"></p>
+            </div>
+            <button id="back-to-role">Choose Another Role</button>
+        </div>
+
+        <!-- Entrepreneur Screen -->
+        <div id="entrepreneur-screen" class="hidden">
+            <h2>Create Your Product</h2>
+            <p>Select 3 cards from the options below:</p>
+            <div class="card-grid" id="entrepreneur-cards"></div>
+            <button id="finalize-choices" disabled>Finalize Choices (0/3)</button>
+        </div>
+
+        <!-- Entrepreneur Final Selection -->
+        <div id="entrepreneur-final-screen" class="hidden">
+            <h2>Your Product</h2>
+            <p>Combine these to create your pitch:</p>
+            <div class="card-row" id="final-selection"></div>
+            <button id="back-to-entrepreneur">Choose Different Cards</button>
+            <button id="back-to-role-from-final">Choose Another Role</button>
+        </div>
     </div>
 
-<!-- Other Games -->
-<ul id="Other-Games">
-    <li><a href="https://kay-who-codes.github.io/Misanthrocards/" target="_blank">Play Misanthrocards</a></li>
-    <li><a href="https://kay-who-codes.github.io/Job-Cards/" target="_blank">Play Job Cards</a></li>
-</ul>
+    <script>
+        // Game state
+        const gameState = {
+            cards: {
+                buyerCards: [
+                    "Busy Mum with five kids",
+                    "College student on a budget",
+                    "Retired millionaire looking for excitement",
+                    "Tech CEO who wants the latest gadgets",
+                    "Fitness enthusiast who hates exercise"
+                ],
+                entrepreneurCards: [
+                    "Toothbrush",
+                    "Selfie stick",
+                    "Inflatable unicorn",
+                    "Smartphone case",
+                    "Wireless earbuds",
+                    "Portable blender",
+                    "LED shoelaces",
+                    "Solar-powered backpack",
+                    "Electric scooter",
+                    "Virtual reality headset"
+                ]
+            }
+        };
 
-    <div id="card-display" class="hidden">
-        <div id="cards-output"></div>
-        <button onclick="returnToMenu()">Return to Menu</button>
-    </div>
+        // DOM elements
+        const roleSelectionScreen = document.getElementById('role-selection-screen');
+        const buyerScreen = document.getElementById('buyer-screen');
+        const entrepreneurScreen = document.getElementById('entrepreneur-screen');
+        const entrepreneurFinalScreen = document.getElementById('entrepreneur-final-screen');
 
-  <!-- Footer for Credit Message -->
-  <footer class="credit-message">
-    Created by <a href="https://linktr.ee/kaywhocreates" target="_blank">Kay 🧡</a>
-  </footer>
+        // Initialize the game
+        document.getElementById('buyer-card').addEventListener('click', () => selectRole('buyer'));
+        document.getElementById('entrepreneur-card').addEventListener('click', () => selectRole('entrepreneur'));
+        document.getElementById('back-to-role').addEventListener('click', backToRole);
+        document.getElementById('back-to-entrepreneur').addEventListener('click', backToEntrepreneur);
+        document.getElementById('back-to-role-from-final').addEventListener('click', backToRole);
 
-    <script src="script.js"></script>
+        // Try to load cards from JSON
+        fetch('cards.json')
+            .then(response => response.json())
+            .then(data => {
+                gameState.cards = data;
+            })
+            .catch(error => {
+                console.log('Using default cards as cards.json could not be loaded');
+            });
+
+        function selectRole(role) {
+            if (role === 'buyer') {
+                // Show buyer screen with random prompt
+                const randomPrompt = gameState.cards.buyerCards[
+                    Math.floor(Math.random() * gameState.cards.buyerCards.length)
+                ];
+                document.getElementById('buyer-prompt').textContent = randomPrompt;
+                
+                roleSelectionScreen.classList.add('hidden');
+                buyerScreen.classList.remove('hidden');
+            } else {
+                // Entrepreneur - show card selection
+                showEntrepreneurCards();
+                roleSelectionScreen.classList.add('hidden');
+                entrepreneurScreen.classList.remove('hidden');
+            }
+        }
+
+        function showEntrepreneurCards() {
+            const cardsContainer = document.getElementById('entrepreneur-cards');
+            cardsContainer.innerHTML = '';
+            
+            // Shuffle and pick 7 cards
+            const shuffledCards = [...gameState.cards.entrepreneurCards].sort(() => 0.5 - Math.random());
+            const selectedCards = shuffledCards.slice(0, 7);
+            
+            selectedCards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.innerHTML = `<h3>Item ${index + 1}</h3><p>${card}</p>`;
+                cardElement.dataset.cardText = card;
+                
+                cardElement.addEventListener('click', () => {
+                    cardElement.classList.toggle('selected');
+                    updateFinalizeButton();
+                });
+                
+                cardsContainer.appendChild(cardElement);
+            });
+        }
+
+        function updateFinalizeButton() {
+            const selectedCards = document.querySelectorAll('#entrepreneur-cards .card.selected');
+            const finalizeButton = document.getElementById('finalize-choices');
+            
+            finalizeButton.disabled = selectedCards.length !== 3;
+            finalizeButton.textContent = `Finalize Choices (${selectedCards.length}/3)`;
+            
+            if (selectedCards.length === 3) {
+                finalizeButton.addEventListener('click', showFinalSelection, { once: true });
+            } else {
+                finalizeButton.removeEventListener('click', showFinalSelection);
+            }
+        }
+
+        function showFinalSelection() {
+            const selectedCards = document.querySelectorAll('#entrepreneur-cards .card.selected');
+            const finalSelectionContainer = document.getElementById('final-selection');
+            finalSelectionContainer.innerHTML = '';
+            
+            selectedCards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.innerHTML = `<h3>Selected Item</h3><p>${card.dataset.cardText}</p>`;
+                finalSelectionContainer.appendChild(cardElement);
+            });
+            
+            entrepreneurScreen.classList.add('hidden');
+            entrepreneurFinalScreen.classList.remove('hidden');
+        }
+
+        function backToRole() {
+            buyerScreen.classList.add('hidden');
+            entrepreneurScreen.classList.add('hidden');
+            entrepreneurFinalScreen.classList.add('hidden');
+            roleSelectionScreen.classList.remove('hidden');
+        }
+
+        function backToEntrepreneur() {
+            entrepreneurFinalScreen.classList.add('hidden');
+            entrepreneurScreen.classList.remove('hidden');
+            // Clear previous selections
+            document.querySelectorAll('#entrepreneur-cards .card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            updateFinalizeButton();
+        }
+    </script>
 </body>
 </html>
