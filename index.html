@@ -102,6 +102,12 @@
             display: none;
         }
 
+        .loading {
+            color: var(--accent-green);
+            text-align: center;
+            margin: 20px 0;
+        }
+
         @media (max-width: 768px) {
             .card-grid {
                 grid-template-columns: 1fr;
@@ -115,8 +121,14 @@
 </head>
 <body>
     <div class="container">
+        <!-- Loading Screen -->
+        <div id="loading-screen">
+            <h1>Dope or Nope</h1>
+            <p class="loading">Loading cards...</p>
+        </div>
+
         <!-- Role Selection -->
-        <div id="role-selection-screen">
+        <div id="role-selection-screen" class="hidden">
             <h1>Dope or Nope</h1>
             <h3>Choose your role:</h3>
             <div class="card-row">
@@ -163,50 +175,48 @@
         // Game state
         const gameState = {
             cards: {
-                buyerCards: [
-                    "Busy Mum with five kids",
-                    "College student on a budget",
-                    "Retired millionaire looking for excitement",
-                    "Tech CEO who wants the latest gadgets",
-                    "Fitness enthusiast who hates exercise"
-                ],
-                entrepreneurCards: [
-                    "Toothbrush",
-                    "Selfie stick",
-                    "Inflatable unicorn",
-                    "Smartphone case",
-                    "Wireless earbuds",
-                    "Portable blender",
-                    "LED shoelaces",
-                    "Solar-powered backpack",
-                    "Electric scooter",
-                    "Virtual reality headset"
-                ]
+                buyerCards: [],
+                entrepreneurCards: []
             }
         };
 
         // DOM elements
+        const loadingScreen = document.getElementById('loading-screen');
         const roleSelectionScreen = document.getElementById('role-selection-screen');
         const buyerScreen = document.getElementById('buyer-screen');
         const entrepreneurScreen = document.getElementById('entrepreneur-screen');
         const entrepreneurFinalScreen = document.getElementById('entrepreneur-final-screen');
 
-        // Initialize the game
-        document.getElementById('buyer-card').addEventListener('click', () => selectRole('buyer'));
-        document.getElementById('entrepreneur-card').addEventListener('click', () => selectRole('entrepreneur'));
-        document.getElementById('back-to-role').addEventListener('click', backToRole);
-        document.getElementById('back-to-entrepreneur').addEventListener('click', backToEntrepreneur);
-        document.getElementById('back-to-role-from-final').addEventListener('click', backToRole);
+        // Initialize the game after loading cards
+        loadCards().then(() => {
+            loadingScreen.classList.add('hidden');
+            roleSelectionScreen.classList.remove('hidden');
+            
+            // Set up event listeners
+            document.getElementById('buyer-card').addEventListener('click', () => selectRole('buyer'));
+            document.getElementById('entrepreneur-card').addEventListener('click', () => selectRole('entrepreneur'));
+            document.getElementById('back-to-role').addEventListener('click', backToRole);
+            document.getElementById('back-to-entrepreneur').addEventListener('click', backToEntrepreneur);
+            document.getElementById('back-to-role-from-final').addEventListener('click', backToRole);
+        }).catch(error => {
+            loadingScreen.querySelector('.loading').textContent = "Error loading cards. Please ensure cards.json exists and is properly formatted.";
+            console.error('Error loading cards:', error);
+        });
 
-        // Try to load cards from JSON
-        fetch('cards.json')
-            .then(response => response.json())
-            .then(data => {
-                gameState.cards = data;
-            })
-            .catch(error => {
-                console.log('Using default cards as cards.json could not be loaded');
-            });
+        // Load cards exclusively from JSON
+        async function loadCards() {
+            const response = await fetch('cards.json');
+            if (!response.ok) {
+                throw new Error('Failed to load cards.json');
+            }
+            gameState.cards = await response.json();
+            
+            // Validate we have at least some cards
+            if (!gameState.cards.buyerCards || !gameState.cards.entrepreneurCards || 
+                gameState.cards.buyerCards.length === 0 || gameState.cards.entrepreneurCards.length < 3) {
+                throw new Error('cards.json must contain at least 1 buyer card and 3 entrepreneur cards');
+            }
+        }
 
         function selectRole(role) {
             if (role === 'buyer') {
@@ -230,9 +240,9 @@
             const cardsContainer = document.getElementById('entrepreneur-cards');
             cardsContainer.innerHTML = '';
             
-            // Shuffle and pick 7 cards
+            // Shuffle and pick 7 cards (or all if less than 7)
             const shuffledCards = [...gameState.cards.entrepreneurCards].sort(() => 0.5 - Math.random());
-            const selectedCards = shuffledCards.slice(0, 7);
+            const selectedCards = shuffledCards.slice(0, Math.min(7, gameState.cards.entrepreneurCards.length));
             
             selectedCards.forEach((card, index) => {
                 const cardElement = document.createElement('div');
