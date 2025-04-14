@@ -5,6 +5,7 @@
     --text-secondary: rgb(120, 194, 110);
     --accent-green: #4CAF50;
     --accent-green-dark: #388E3C;
+    --accent-green-light: #7bd97f;
     --card-bg: #1E1E1E;
     --card-border: #333;
 }
@@ -157,6 +158,21 @@ button:disabled {
     text-align: center;
     margin: 20px 0;
     font-size: 1.2rem;
+}
+
+#score-display {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--card-bg);
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    font-weight: bold;
+    color: var(--accent-green-light);
 }
 
 /* Responsive Adjustments */

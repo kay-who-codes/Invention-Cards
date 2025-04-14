@@ -1,10 +1,21 @@
 // Game state
 const gameState = {
+    score: 0,
     cards: {
         buyerCards: [],
         entrepreneurCards: []
     }
 };
+
+// Helper function to convert to Title Case
+function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}
 
 // DOM elements
 const loadingScreen = document.getElementById('loading-screen');
@@ -13,11 +24,11 @@ const buyerScreen = document.getElementById('buyer-screen');
 const entrepreneurScreen = document.getElementById('entrepreneur-screen');
 const entrepreneurFinalScreen = document.getElementById('entrepreneur-final-screen');
 
-// Initialize the game after loading cards
+// Initialise the game after loading cards
 loadCards().then(() => {
     loadingScreen.classList.add('hidden');
     roleSelectionScreen.classList.remove('hidden');
-    
+
     // Set up event listeners
     document.getElementById('buyer-card').addEventListener('click', () => selectRole('buyer'));
     document.getElementById('entrepreneur-card').addEventListener('click', () => selectRole('entrepreneur'));
@@ -25,6 +36,8 @@ loadCards().then(() => {
     document.getElementById('back-to-entrepreneur').addEventListener('click', backToEntrepreneur);
     document.getElementById('back-to-role-from-final').addEventListener('click', backToRole);
     document.getElementById('back-to-role-from-entrepreneur').addEventListener('click', backToRole);
+    document.getElementById('earn-point').addEventListener('click', earnPoint);
+
 }).catch(error => {
     loadingScreen.querySelector('.loading').textContent = "Error loading cards. Please ensure cards.json exists and is properly formatted.";
     console.error('Error loading cards:', error);
@@ -51,7 +64,7 @@ function selectRole(role) {
         const randomPrompt = gameState.cards.buyerCards[
             Math.floor(Math.random() * gameState.cards.buyerCards.length)
         ];
-        document.getElementById('buyer-prompt').textContent = randomPrompt;
+        document.getElementById('buyer-prompt').textContent = toTitleCase(randomPrompt);
         
         roleSelectionScreen.classList.add('hidden');
         buyerScreen.classList.remove('hidden');
@@ -74,29 +87,33 @@ function showEntrepreneurCards() {
     selectedCards.forEach((card, index) => {
         const cardElement = document.createElement('div');
         cardElement.className = 'card';
-        cardElement.innerHTML = `<h3>Item ${index + 1}</h3><h2>${card}</h2>`;
-        cardElement.dataset.cardText = card;
+        
+        // Convert card text to Title Case
+        const titleCaseCard = toTitleCase(card);
+        
+        cardElement.innerHTML = `<h3>Item ${index + 1}</h3><h2>${titleCaseCard}</h2>`;
+        cardElement.dataset.cardText = titleCaseCard;
         
         cardElement.addEventListener('click', () => {
             cardElement.classList.toggle('selected');
-            updateFinalizeButton();
+            updateFinaliseButton();
         });
         
         cardsContainer.appendChild(cardElement);
     });
 }
 
-function updateFinalizeButton() {
+function updateFinaliseButton() {
     const selectedCards = document.querySelectorAll('#entrepreneur-cards .card.selected');
-    const finalizeButton = document.getElementById('finalize-choices');
+    const finaliseButton = document.getElementById('finalise-choices');
     
-    finalizeButton.disabled = selectedCards.length !== 3;
-    finalizeButton.textContent = `Finalize Choices (${selectedCards.length}/3)`;
+    finaliseButton.disabled = selectedCards.length !== 3;
+    finaliseButton.textContent = `Finalise Choices (${selectedCards.length}/3)`;
     
     if (selectedCards.length === 3) {
-        finalizeButton.addEventListener('click', showFinalSelection, { once: true });
+        finaliseButton.addEventListener('click', showFinalSelection, { once: true });
     } else {
-        finalizeButton.removeEventListener('click', showFinalSelection);
+        finaliseButton.removeEventListener('click', showFinalSelection);
     }
 }
 
@@ -110,6 +127,7 @@ function showFinalSelection() {
         cardElement.className = 'card';
         cardElement.innerHTML = `<h3>Selected Item</h3><h2>${card.dataset.cardText}</h2>`;
         finalSelectionContainer.appendChild(cardElement);
+        updateScoreDisplay();
     });
     
     entrepreneurScreen.classList.add('hidden');
@@ -130,11 +148,22 @@ function backToEntrepreneur() {
     document.querySelectorAll('#entrepreneur-cards .card').forEach(card => {
         card.classList.remove('selected');
     });
-    updateFinalizeButton();
+    updateFinaliseButton();
+}
+
+function earnPoint() {
+    playClick_Sound();
+    gameState.score++;
+    updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+    const scoreDisplay = document.getElementById('score-display');
+    scoreDisplay.textContent = `Score: ${gameState.score}`;
+    scoreDisplay.classList.toggle('hidden', gameState.score === 0);
 }
 
 // Play Sound When Clicking Button
-
 const Click_Sound = new Audio('Assets/click.mp3'); // Create an Audio object
 
 // Function to play the sound
@@ -143,7 +172,7 @@ function playClick_Sound() {
 }
 
 // Add event listeners to buttons
-document.getElementById('finalize-choices').addEventListener('click', playClick_Sound);
+document.getElementById('finalise-choices').addEventListener('click', playClick_Sound);
 document.getElementById('back-to-entrepreneur').addEventListener('click', playClick_Sound);
 document.getElementById('back-to-role-from-final').addEventListener('click', playClick_Sound);
 document.getElementById('back-to-role').addEventListener('click', playClick_Sound);
